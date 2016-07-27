@@ -1,1 +1,1 @@
-include ':app', ':customdiscount', ':custompayment'
+include ':app', ':customdiscount', ':custompayment',':customactivation'

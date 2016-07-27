@@ -1,0 +1,44 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="co.poynt.samples.customactivation">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme">
+
+        <!-- activity to collect card info manually -->
+        <activity
+            android:name=".ActivationActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@android:style/Theme.Holo.Dialog">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+
+        </activity>
+
+        <!-- service that implements custom tender payment service. -->
+        <service
+            android:name=".CustomActivationService"
+            android:enabled="true"
+            android:exported="true">
+
+            <!-- This service implements IPoyntActivationService interface to
+                 support activation capability.-->
+            <intent-filter>
+                <action android:name="co.poynt.os.services.v1.IPoyntActivationService" />
+            </intent-filter>
+
+            <!-- Define capability in an xml file.-->
+            <meta-data
+                android:name="co.poynt.os.service.capability"
+                android:resource="@xml/activation_capabilities" />
+        </service>
+
+    </application>
+
+</manifest>

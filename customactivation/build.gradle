@@ -5,17 +5,30 @@ android {
     buildToolsVersion "23.0.1"
 
     defaultConfig {
-        applicationId "co.poynt.samples.customdiscount"
+        applicationId "co.poynt.samples.customactivation"
         minSdkVersion 19
         targetSdkVersion 23
         versionCode 1
         versionName "1.0"
     }
+
+    configurations.all {
+        // check for updates every build (gradle checks for updates every 24 hours)
+        // Source: http://forums.gradle.org/gradle/topics/how_to_get_gradle_to_download_newer_snapshots_to_gradle_cache_when_using_an_ivy_repository
+        resolutionStrategy.cacheChangingModulesFor 0, 'seconds'
+    }
+
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+}
+
+allprojects {
+    repositories {
+        mavenLocal()
     }
 }
 
@@ -25,10 +38,12 @@ dependencies {
     compile 'com.jakewharton.timber:timber:4.0.1'
     compile 'co.poynt.api:android-api-model:1.2.62@jar'
     compile 'co.poynt.android.sdk:poynt-sdk:1.2.15-SNAPSHOT@aar'
+
     // key signing and verification.
     compile 'com.madgag.spongycastle:prov:1.51.0.0'
     compile 'com.madgag.spongycastle:pkix:1.51.0.0'
     compile 'com.madgag.spongycastle:core:1.51.0.0'
     compile 'com.madgag.spongycastle:pg:1.51.0.0'
-    compile 'com.google.code.gson:gson:2.4'
+    compile 'com.google.code.gson:gson:2.6'
+
 }
