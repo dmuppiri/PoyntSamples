@@ -44,6 +44,7 @@ public class InAppBillingActivity extends Activity {
     private Button getPlansBtn;
     private Button replaceSubscription;
     private Button restoreSubscription;
+    private Button subscribeAddon;
     private TextView mDumpTextView;
     private ScrollView mScrollView;
     private TextView status;
@@ -224,6 +225,49 @@ public class InAppBillingActivity extends Activity {
                 }
             }
         });
+        subscribeAddon = (Button) findViewById(R.id.subscribeWithAddon);
+        subscribeAddon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d(TAG, "Clicked on addon subscription");
+                try {
+                    Bundle bundle = getBillingFragmentIntent("f2e9001d-6d51-4e74-888c-c77b9a0ff666", "ADD", "subscription1");
+                    if (bundle != null && bundle.containsKey("BUY_INTENT")) {
+                        PendingIntent intent = bundle.getParcelable("BUY_INTENT");
+                        if (intent != null) {
+                            try {
+                                startIntentSenderForResult(
+                                        intent.getIntentSender(),
+                                        BUY_INTENT_REQUEST_CODE,
+                                        null,
+                                        0,
+                                        0,
+                                        0);
+                            } catch (IntentSender.SendIntentException e) {
+                                e.printStackTrace();
+                                logReceivedMessage("Failed to launch billing fragment!");
+                            }
+                        } else {
+                            logReceivedMessage("Did not receive buy intent!");
+                        }
+                    } else {
+                        logReceivedMessage("Failed to obtain billing fragment intent!");
+                    }
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        });
+    }
+
+    private Bundle getBillingFragmentIntent(String planId, String addonAction, String subscriptionId) throws RemoteException {
+        Bundle bundle = new Bundle();
+        // add plan Id
+        bundle.putString("plan_id", planId);
+        bundle.putString("addon_action", addonAction);
+        bundle.putString("subscription_id", subscriptionId);
+        return mBillingService.getBillingIntent(getPackageName(), bundle);
     }
 
     private Bundle getBillingFragmentIntent(String planId, boolean replace) throws RemoteException {
