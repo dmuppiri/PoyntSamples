@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<capability>
+    <appid>co.poynt.samples.codesamples</appid>
+    <type>RATING_AND_REVIEW</type>
+    <provider>Poynt Rating Provider</provider>
+    <logo>@mipmap/ic_lauher</logo>
+    <entry_method type="CUSTOM" />
+</capability>

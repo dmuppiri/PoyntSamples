@@ -131,6 +131,17 @@
         android:resource="@xml/receipt_decorator_capability" />
 
         </service>
+        <!-- Enable rating and review service if required -->
+        <!--<service android:name=".Services.RatingAndReviewService"-->
+            <!--android:enabled="true"-->
+            <!--android:exported="true">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="co.poynt.os.services.v1.IPoyntRatingAndReviewService" />-->
+            <!--</intent-filter>-->
+            <!--<meta-data-->
+                <!--android:name="co.poynt.os.service.capability"-->
+                <!--android:resource="@xml/rating_and_review_capability" />-->
+        <!--</service>-->
 
 
     </application>
