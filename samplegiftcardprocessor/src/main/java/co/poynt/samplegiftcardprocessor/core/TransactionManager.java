@@ -11,9 +11,11 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import java.lang.reflect.Type;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
@@ -183,7 +185,6 @@ public class TransactionManager {
                 transaction.setStatus(TransactionStatus.CAPTURED);
             }
             transaction.setProcessorResponse(processorResponse);
-
         } else if (transaction.getAction() == TransactionAction.REFUND) {
             // add processor response
             transaction.setStatus(TransactionStatus.REFUNDED);
@@ -303,14 +304,25 @@ public class TransactionManager {
     private void setProcessorTransactionId(Transaction transaction, ProcessorResponse processorResponse) {
         String processorTransactionId = UUID.randomUUID().toString();
         processorResponse.setTransactionId(processorTransactionId);
-
+        List<TransactionReference> transactionReferences = new ArrayList<>();
         // if you need processorTransactionId be returned in the refund request
         // you can add it as a transaction reference
         TransactionReference processorTxnIdReference = new TransactionReference();
         processorTxnIdReference.setType(TransactionReferenceType.CUSTOM);
         processorTxnIdReference.setCustomType("processorTransactionId");
         processorTxnIdReference.setId(processorTransactionId);
-        transaction.setReferences(Collections.singletonList(processorTxnIdReference));
+        transactionReferences.add(processorTxnIdReference);
+        // Set the order reference to attach the transaction to the order
+        TransactionReference orderReference = new TransactionReference();
+        orderReference.setType(TransactionReferenceType.POYNT_ORDER);
+        for (TransactionReference reference: transaction.getReferences()) {
+            if (reference.getType().equals(TransactionReferenceType.POYNT_ORDER)){
+                orderReference.setId(reference.getId());
+                orderReference.setCustomType(reference.getCustomType());
+            }
+        }
+        transactionReferences.add(orderReference);
+        transaction.setReferences(transactionReferences);
     }
 
     public void captureTransaction(String transactionId, AdjustTransactionRequest adjustTransactionRequest, String requestId, IPoyntTransactionServiceListener listener) {
