@@ -104,7 +104,7 @@ public class InAppBillingActivity extends Activity {
                     logReceivedMessage("Requesting billing intent...");
                     try {
                         // launch billing for $0 plan - add as a new subscription
-                        Bundle bundle = getBillingFragmentIntent("f2e9001d-6d51-4e74-888c-c77b9a0ff666", false);
+                        Bundle bundle = getBillingFragmentIntent("b99a6335-fbd1-4ed0-a352-df4f20e9c11e", false);
                         if (bundle != null && bundle.containsKey("BUY_INTENT")) {
                             PendingIntent intent = bundle.getParcelable("BUY_INTENT");
                             if (intent != null) {
@@ -147,7 +147,7 @@ public class InAppBillingActivity extends Activity {
                     logReceivedMessage("Requesting billing intent...");
                     try {
                         // launch billing fragment for $5 plan - replace existing one
-                        Bundle bundle = getBillingFragmentIntent("01e2a28f-42c4-4efc-a4f2-4e0c4e4b842e", true);
+                        Bundle bundle = getBillingFragmentIntent("b99a6335-fbd1-4ed0-a352-df4f20e9c11e", true);
                         if (bundle != null && bundle.containsKey("BUY_INTENT")) {
                             PendingIntent intent = bundle.getParcelable("BUY_INTENT");
                             if (intent != null) {
