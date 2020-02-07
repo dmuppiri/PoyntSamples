@@ -64,7 +64,9 @@ public class MainActivity extends AppCompatActivity {
                 byte mode = (byte) 0x00;
                 // bin ranges only apply to MSR
                 byte cardInterface = (byte) 0x01;
-                // bin range
+                // Bin range string explained
+                //   {07}   |       {06}    |   {000000}      |    {111111}
+                // constant | length of BIN | BIN lower limit | BIN higher limit
                 String binRange = "0706000000111111";
                 ByteArrayOutputStream ptOs = null;
                 try {
