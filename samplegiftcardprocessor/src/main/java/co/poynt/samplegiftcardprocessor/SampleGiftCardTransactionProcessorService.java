@@ -126,38 +126,36 @@ public class SampleGiftCardTransactionProcessorService extends Service {
 
         @Override
         public void getBalanceInquiry(BalanceInquiry balanceInquiry, String s, IPoyntTransactionBalanceInquiryListener iPoyntTransactionBalanceInquiryListener) throws RemoteException {
-
         }
 
         @Override
         public void captureAllTransactionsWithOptions(String s, Bundle bundle, CaptureAllRequest captureAllRequest, IPoyntTransactionCaptureAllListener iPoyntTransactionCaptureAllListener) throws RemoteException {
-            Log.d(TAG, "captureAllTransactionsWithOptions()");
-
         }
 
         @Override
         public void getChildTransactions(String s, String s1, IPoyntGetTransactionsListener iPoyntGetTransactionsListener) throws RemoteException {
-
         }
 
         @Override
         public void checkPayment(Bundle bundle, String s, IPoyntCheckPaymentListener iPoyntCheckPaymentListener) throws RemoteException {
-
         }
 
         @Override
         public void getTotals(boolean b, boolean b1, IPoyntTerminalTotalsListener iPoyntTerminalTotalsListener) throws RemoteException {
-
         }
 
         @Override
         public void getTerminalStatus(IPoyntTerminalStatusListener iPoyntTerminalStatusListener) throws RemoteException {
-
+            Log.d(TAG, "getTerminalStatus called");
+            iPoyntTerminalStatusListener.onResponse(null, null);
         }
 
         @Override
         public void checkCardV2(Payment payment, Bundle bundle, IPoyntCheckCardListener iPoyntCheckCardListener) throws RemoteException {
+        }
 
+        @Override
+        public void captureEmvDataV3(String s, EMVData emvData, String s1, IPoyntTransactionServiceListener iPoyntTransactionServiceListener) throws RemoteException {
         }
 
         @Override
