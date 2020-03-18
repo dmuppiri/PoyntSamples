@@ -505,6 +505,10 @@ public class SecondScreenServiceV2Activity extends Activity {
             Bundle options = new Bundle();
             options.putString(Intents.EXTRA_LEFT_BUTTON_TITLE, "Nope");
             options.putString(Intents.EXTRA_RIGHT_BUTTON_TITLE, "I do");
+
+            // Background image
+            Bitmap background = BitmapFactory.decodeResource(getResources(), R.drawable.poynt_logo_second_screen);
+            options.putParcelable(Intents.EXTRA_BACKGROUND_IMAGE, background);
             /** AS URL **/
             options.putString(Intents.EXTRA_CONTENT_TYPE, Intents.EXTRA_CONTENT_TYPE_URL);
             String agreement = "https://s3.amazonaws.com/poynt-store/terms/poynt_apps_agreement_US.html";
