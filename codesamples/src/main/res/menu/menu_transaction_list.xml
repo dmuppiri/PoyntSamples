@@ -4,4 +4,8 @@
     tools:context="co.poynt.samples.codesamples.TransactionListActivity">
     <item android:id="@+id/action_settings" android:title="@string/action_settings"
         android:orderInCategory="100" />
+    <item android:id="@+id/action_refresh_transactions" android:title="@string/sync"
+        android:orderInCategory="300"/>
+    <item android:id="@+id/action_last_sync_time" android:title="@string/sync_time"
+        android:orderInCategory="200"/>
 </menu>

@@ -3,8 +3,12 @@ package co.poynt.samples.codesamples;
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.LoaderManager;
+import android.app.PendingIntent;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.Loader;
 import android.database.Cursor;
 import android.os.Bundle;
@@ -14,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import java.util.Date;
 
 import co.poynt.os.contentproviders.orders.transactions.TransactionsColumns;
 import co.poynt.os.model.Intents;
@@ -25,6 +30,8 @@ public class TransactionListActivity extends Activity
         implements LoaderManager.LoaderCallbacks<Cursor> {
     private static final String TAG = "TxnListActivity";
     private final int DISPLAY_PAYMENT_REQUEST = 12345;
+    private final int TRANSACTION_SYNC_TIME_REQUEST = 54235;
+    private final String TRANSACTIONS_SYNC_TIME_RESULT = "TRANSACTION_SYNC_TIME_RESULT";
     private ListView transactionListview;
     private static final int URL_LOADER = 0;
     private String sortOrder = TransactionsColumns.CREATEDAT + " DESC";
@@ -66,13 +73,39 @@ public class TransactionListActivity extends Activity
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
+        } else if (id == R.id.action_refresh_transactions){
+            sendBroadcast(new Intent(Intents.ACTION_SYNC_TRANSACTIONS_FROM_CLOUD));
+            return true;
+        } else if (id == R.id.action_last_sync_time) {
+            // create the intent that needs to be called to deliver result
+            Intent resultIntent = new Intent(TRANSACTIONS_SYNC_TIME_RESULT);
+            PendingIntent pendingIntent = PendingIntent.getBroadcast(this, TRANSACTION_SYNC_TIME_REQUEST,
+                    resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+            // create a intent to request sync time
+            Intent syncTimeIntent = new Intent(Intents.ACTION_GET_TRANSACTIONS_SYNC_INFO);
+            syncTimeIntent.putExtra(Intents.EXTRA_LAST_SYNC_INFO_RESULT_RECEIVER_INTENT, pendingIntent);
+            // register local receiver to receive the result
+            registerReceiver(syncTimeReceiver, new IntentFilter(TRANSACTIONS_SYNC_TIME_RESULT));
+            sendBroadcast(syncTimeIntent);
         }
         if (id == android.R.id.home) {
             finish();
         }
-
         return super.onOptionsItemSelected(item);
     }
+
+    private BroadcastReceiver syncTimeReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getAction() != null && intent.getAction().equals(TRANSACTIONS_SYNC_TIME_RESULT)) {
+                long lastSyncTime = intent.getLongExtra(Intents.EXTRA_LAST_SYNC_INFO, 0);
+                if (lastSyncTime != 0) {
+                    Date date = new Date(lastSyncTime);
+                    Log.d(TAG, "Last transaction sync happened at " + date.toString());
+                }
+            }
+        }
+    };
 
     public Loader<Cursor> onCreateLoader(int loaderId, Bundle args) {
 
